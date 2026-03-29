@@ -1,39 +1,77 @@
 #include "vector2.h"
 #include <cmath>
+#include <stdexcept>
 
-Vector2::Vector2(double x, double y) {
-    this->x = x;
-    this->y = y;
+// Constructors
+Vector2D::Vector2D() : x(0), y(0) {}
+
+Vector2D::Vector2D(double xVal, double yVal) : x(xVal), y(yVal) {}
+
+// Operator Overloading
+Vector2D Vector2D::operator+(const Vector2D& v) const {
+    return Vector2D(x + v.x, y + v.y);
 }
 
-Vector2 Vector2::operator+(const Vector2& other) const {
-    return Vector2(x + other.x, y + other.y);
+Vector2D Vector2D::operator-(const Vector2D& v) const {
+    return Vector2D(x - v.x, y - v.y);
 }
 
-Vector2 Vector2::operator-(const Vector2& other) const {
-    return Vector2(x - other.x, y - other.y);
+Vector2D Vector2D::operator*(double scalar) const {
+    return Vector2D(x * scalar, y * scalar);
 }
 
-Vector2 Vector2::operator*(double scalar) const {
-    return Vector2(x * scalar, y * scalar);
+// Dot product
+double Vector2D::dot(const Vector2D& v) const {
+    return x * v.x + y * v.y;
 }
 
-double Vector2::dot(const Vector2& other) const {
-    return (x * other.x + y * other.y);
+// Cross product (2D returns scalar)
+double Vector2D::cross(const Vector2D& v) const {
+    return x * v.y - y * v.x;
 }
 
-double Vector2::magnitude() const {
+// Magnitude
+double Vector2D::magnitude() const {
     return std::sqrt(x * x + y * y);
 }
 
-Vector2 Vector2::normalize() const {
-    double mag = magnitude();
-    if (mag == 0) {
-        return Vector2(0, 0); // Return a zero vector if the magnitude is zero
-    }
-    return Vector2(x / mag, y / mag);
+double Vector2D::squaredMagnitude() const {
+    return x * x + y * y;
 }
 
-double Vector2::distance(const Vector2& other) const {
-    return std::sqrt((x-other.x)*(x-other.x) + (y-other.y)*(y-other.y));
+// Normalize
+Vector2D Vector2D::normalize() const {
+    double mag = magnitude();
+    if (mag == 0) {
+        throw std::runtime_error("Cannot normalize zero vector");
+    }
+    return Vector2D(x / mag, y / mag);
+}
+
+// Angle between vectors
+double Vector2D::angle(const Vector2D& v) const {
+    double dotProd = dot(v);
+    double mags = magnitude() * v.magnitude();
+
+    if (mags == 0) {
+        throw std::runtime_error("Angle undefined for zero vector");
+    }
+
+    return std::acos(dotProd / mags);
+}
+
+// Projection
+Vector2D Vector2D::projectOnto(const Vector2D& v) const {
+    double denom = v.squaredMagnitude();
+    if (denom == 0) {
+        throw std::runtime_error("Cannot project onto zero vector");
+    }
+
+    double scale = dot(v) / denom;
+    return v * scale;
+}
+
+// Print
+void Vector2D::print() const {
+    std::cout << "(" << x << ", " << y << ")" << std::endl;
 }

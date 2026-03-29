@@ -1,22 +1,40 @@
-#ifndef VECTOR2_H
-#define VECTOR2_H
+#ifndef VECTOR2D_H
+#define VECTOR2D_H
 
-class Vector2 {
+#include <iostream>
+
+class Vector2D {
 public:
-    double x;
-    double y;
-    Vector2();
-    Vector2(double x, double y);
+    double x, y;
 
-    Vector2 operator+(const Vector2& v) const;
-    Vector2 operator-(const Vector2& v) const;
-    Vector2 operator*(double scalar) const;
-    Vector2 normalize() const;
-    double dot(const Vector2& v) const;
+    // Constructors
+    Vector2D();
+    Vector2D(double xVal, double yVal);
+
+    // Basic operations
+    Vector2D operator+(const Vector2D& v) const;
+    Vector2D operator-(const Vector2D& v) const;
+    Vector2D operator*(double scalar) const;
+
+    // Dot and cross
+    double dot(const Vector2D& v) const;
+    double cross(const Vector2D& v) const;
+
+    // Magnitude
     double magnitude() const;
-    double distance(const Vector2& v) const;
-    
+    double squaredMagnitude() const;
 
+    // Normalize
+    Vector2D normalize() const;
+
+    // Angle between vectors (radians)
+    double angle(const Vector2D& v) const;
+
+    // Projection of this onto v
+    Vector2D projectOnto(const Vector2D& v) const;
+
+    // Print
+    void print() const;
 };
 
 #endif

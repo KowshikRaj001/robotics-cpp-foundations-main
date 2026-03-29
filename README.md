@@ -1,7 +1,5 @@
 # 🚀 Robotics C++ Fundamentals
 
-# Robotics C++ Foundations
-
 ## 📌 Purpose
 
 This repository is part of my journey to become a **Robotics & Perception Engineer**.
