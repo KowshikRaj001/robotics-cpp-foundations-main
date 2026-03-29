@@ -1,0 +1,394 @@
+# Week 1 — Vector2D Mathematics for Robotics (C++)
+
+## Overview
+
+This module implements a **2D Vector Mathematics Library in C++** as the first step of the **Robotics C++ Foundations** project.
+
+Vector mathematics is fundamental in robotics because robots operate in **physical space** where position, velocity, force, and orientation are represented as vectors.
+
+This project implements a custom `Vector2D` class that supports common vector operations used in robotics, simulation, and computer vision.
+
+---
+
+# Why Vectors Matter in Robotics
+
+Robotics systems use vectors for many core operations:
+
+| Application     | Example                         |
+| --------------- | ------------------------------- |
+| Robot Position  | `(x, y)` coordinates of a robot |
+| Velocity        | Direction and speed of movement |
+| Path Planning   | Computing direction to a target |
+| Computer Vision | Camera ray directions           |
+| Kinematics      | Motion of robot joints          |
+| Control Systems | Force and torque vectors        |
+
+Example robot movement equation:
+
+```
+new_position = position + velocity × time
+```
+
+This equation relies directly on **vector addition and scalar multiplication**.
+
+---
+
+# Mathematical Representation of a Vector
+
+A 2D vector is written as:
+
+```
+v = (x, y)
+```
+
+Where:
+
+* `x` → horizontal component
+* `y` → vertical component
+
+Graphically:
+
+```
+      y
+      ↑
+      |
+      |      v(x,y)
+      |    /
+      |   /
+      |  /
+------|----------------→ x
+```
+
+---
+
+# Implemented Vector Operations
+
+The following vector operations were implemented in C++.
+
+---
+
+# 1. Vector Addition
+
+Vector addition combines two vectors by adding their components.
+
+### Formula
+
+```
+v + w = (x1 + x2 , y1 + y2)
+```
+
+### Example
+
+```
+(3,4) + (1,2) = (4,6)
+```
+
+### Robotics Usage
+
+Used for:
+
+* updating robot position
+* combining motion vectors
+* trajectory computation
+
+Example:
+
+```
+position = position + velocity
+```
+
+---
+
+# 2. Vector Subtraction
+
+Vector subtraction computes the difference between two vectors.
+
+### Formula
+
+```
+v - w = (x1 - x2 , y1 - y2)
+```
+
+### Example
+
+```
+(3,4) - (1,2) = (2,2)
+```
+
+### Robotics Usage
+
+Used to compute **distance and direction to a target**.
+
+Example:
+
+```
+direction = target_position - robot_position
+```
+
+---
+
+# 3. Scalar Multiplication
+
+A vector can be scaled by multiplying it with a scalar value.
+
+### Formula
+
+```
+s × v = (s*x , s*y)
+```
+
+### Example
+
+```
+2 × (3,4) = (6,8)
+```
+
+### Robotics Usage
+
+Used for:
+
+* scaling velocity
+* computing displacement
+* simulation time steps
+
+Example:
+
+```
+displacement = velocity × delta_time
+```
+
+---
+
+# 4. Dot Product
+
+The dot product measures the similarity between two vectors.
+
+### Formula
+
+```
+v · w = x1*x2 + y1*y2
+```
+
+### Example
+
+```
+(3,4) · (1,2) = 3*1 + 4*2 = 11
+```
+
+The dot product is also related to the **angle between vectors**:
+
+```
+v · w = |v||w|cosθ
+```
+
+### Robotics Usage
+
+Used in:
+
+* angle calculations
+* orientation comparison
+* projection of vectors
+* motion alignment
+
+Example:
+
+```
+if dot(forward_vector, target_direction) > 0
+robot is facing the target
+```
+
+---
+
+# 5. Vector Magnitude (Length)
+
+Magnitude represents the **length of a vector**.
+
+### Formula
+
+```
+|v| = sqrt(x² + y²)
+```
+
+### Example
+
+```
+|(3,4)| = sqrt(3² + 4²) = 5
+```
+
+### Robotics Usage
+
+Used for:
+
+* distance calculation
+* speed computation
+* normalization
+
+Example:
+
+```
+distance = |target - robot|
+```
+
+---
+
+# 6. Vector Normalization
+
+Normalization converts a vector into a **unit vector** (length = 1).
+
+### Formula
+
+```
+v̂ = v / |v|
+```
+
+### Example
+
+```
+(3,4) → (0.6 , 0.8)
+```
+
+### Robotics Usage
+
+Used for:
+
+* direction vectors
+* navigation
+* motion control
+* camera ray directions
+
+Example:
+
+```
+direction = normalize(target - robot_position)
+```
+
+---
+
+# Implementation in C++
+
+The `Vector2D` class stores two components:
+
+```
+double x
+double y
+```
+
+Project structure:
+
+```
+week1_vectors
+│
+├── include
+│   └── Vector2D.h
+│
+├── src
+│   └── Vector2D.cpp
+│
+├── main.cpp
+│
+└── CMakeLists.txt
+```
+
+---
+
+# Implemented Methods
+
+### Addition
+
+```cpp
+Vector2D Vector2D::add(const Vector2D& v) const {
+    return Vector2D(x + v.x, y + v.y);
+}
+```
+
+### Subtraction
+
+```cpp
+Vector2D Vector2D::subtract(const Vector2D& v) const {
+    return Vector2D(x - v.x, y - v.y);
+}
+```
+
+### Scalar Multiplication
+
+```cpp
+Vector2D Vector2D::scale(double s) const {
+    return Vector2D(x * s, y * s);
+}
+```
+
+### Dot Product
+
+```cpp
+double Vector2D::dot(const Vector2D& v) const {
+    return x * v.x + y * v.y;
+}
+```
+
+### Magnitude
+
+```cpp
+double Vector2D::magnitude() const {
+    return std::sqrt(x*x + y*y);
+}
+```
+
+### Normalization
+
+```cpp
+Vector2D Vector2D::normalize() const {
+    double mag = magnitude();
+    return Vector2D(x/mag, y/mag);
+}
+```
+
+---
+
+# Example Program
+
+```cpp
+Vector2D position(2,3);
+Vector2D velocity(1,1);
+
+Vector2D new_position = position.add(velocity);
+
+std::cout << new_position.x << "," << new_position.y << std::endl;
+```
+
+Output:
+
+```
+3,4
+```
+
+---
+
+# Future Modules in This Series
+
+This project is part of a **robotics mathematics foundation series**.
+
+Upcoming modules:
+
+```
+Week1_vectors
+Week2_matrix2x2
+Week3_rotation_matrix
+Week4_transform2d
+Week5_robot_kinematics
+```
+
+These modules will build toward:
+
+* robot motion modeling
+* coordinate transformations
+* perception geometry
+* robotics algorithms
+
+---
+
+# Author
+
+**Kowshik Raj**
+
+B.Tech Artificial Intelligence & Machine Learning
+Robotics and Perception Engineering Learner
